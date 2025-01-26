@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
-import userRoutes from "./routes/userRoute.js";
-import adminRoutes from "./routes/adminRoute.js";
-import authRoutes from "./routes/songRoute.js";
-import songRoutes from "./routes/songRoute.js";
-import albumRoutes from "./routes/albumRoute.js";
-import statRoutes from "./routes/statRoute.js";
+import userRoutes from "./routes/user.route.js";
+import adminRoutes from "./routes/admin.route.js";
+import authRoutes from "./routes/song.route.js";
+import songRoutes from "./routes/song.route.js";
+import albumRoutes from "./routes/album.route.js";
+import statRoutes from "./routes/stat.route.js";
 import cors from "cors";
 import { connectDB } from "./lib/db.js";
 
