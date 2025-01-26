@@ -7,6 +7,7 @@ import songRoutes from "./routes/songRoute.js";
 import albumRoutes from "./routes/albumRoute.js";
 import statRoutes from "./routes/statRoute.js";
 import cors from "cors";
+import { connectDB } from "./lib/db.js";
 
 dotenv.config();
 
@@ -27,4 +28,5 @@ app.use("/api/stats", statRoutes);
 
 app.listen(PORT, () => {
   console.log("Server is running");
+  connectDB();
 });
