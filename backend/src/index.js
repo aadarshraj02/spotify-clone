@@ -8,10 +8,12 @@ import albumRoutes from "./routes/album.route.js";
 import statRoutes from "./routes/stat.route.js";
 import cors from "cors";
 import { connectDB } from "./lib/db.js";
+import { clerkMiddleware } from "@clerk/express";
 
 dotenv.config();
 
 const app = express();
+app.use(clerkMiddleware());
 
 const PORT = process.env.PORT;
 
