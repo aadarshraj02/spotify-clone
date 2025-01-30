@@ -51,3 +51,7 @@ export const createSong = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteSong = async(req,res,next)=>{
+  
+}
