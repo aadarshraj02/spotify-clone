@@ -1,7 +1,7 @@
 import { Song } from "../models/song.model.js";
 import { Album } from "../models/album.model.js";
 
-export const createSong = async (req, res) => {
+export const createSong = async (req, res, next) => {
   try {
     if (!req.files || !req.files.audioFile || !req.files.imageFile) {
       return res.status(400).json({
@@ -32,9 +32,6 @@ export const createSong = async (req, res) => {
     }
     res.status(201).json(song);
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server Error",
-      error,
-    });
+    next(error);
   }
 };
