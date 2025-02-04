@@ -26,7 +26,7 @@ export const getFeaturedSongs = async (req, res, next) => {
       },
     ]);
 
-    req.json(songs);
+    res.json(songs);
   } catch (error) {
     next(error);
   }
@@ -49,7 +49,7 @@ export const getMadeForYouSongs = async (req, res, next) => {
       },
     ]);
 
-    req.json(songs);
+    res.json(songs);
   } catch (error) {
     next(error);
   }
@@ -72,7 +72,7 @@ export const getTrendingSongs = async (req, res, next) => {
       },
     ]);
 
-    req.json(songs);
+    res.json(songs);
   } catch (error) {
     next(error);
   }
