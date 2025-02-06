@@ -2,17 +2,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { axiosInstance } from "@/lib/axios";
 import { useUser } from "@clerk/clerk-react";
 import { Loader } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthCallbackPage = () => {
   const { isLoaded, user } = useUser();
   const navigate = useNavigate();
 
+  const syncAttempted = useRef(false);
+
   useEffect(() => {
     const syncUser = async () => {
       try {
-        if (!isLoaded || !user) return;
+        if (!isLoaded || !user || syncAttempted.current) return;
 
         await axiosInstance.post("/auth/callback", {
           id: user.id,
@@ -20,6 +22,7 @@ const AuthCallbackPage = () => {
           lastName: user.lastName,
           imageUrl: user.imageUrl,
         });
+        syncAttempted.current = true;
       } catch (error) {
         return error;
       } finally {
@@ -27,7 +30,7 @@ const AuthCallbackPage = () => {
       }
     };
     syncUser();
-  }, [isLoaded,user,navigate]);
+  }, [isLoaded, user, navigate]);
 
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center">
