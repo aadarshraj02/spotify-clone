@@ -31,10 +31,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     initAuth();
   }, [getToken]);
 
-  if (loading) return;
-  <div className="h-screen w-full flex items-center justify-center">
-    <Loader className="size-8 text-emerald-500 animate-spin" />
-  </div>;
+  if (loading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <Loader className="size-8 text-emerald-500 animate-spin" />
+      </div>
+    );
+  }
 
   return <>{children}</>;
 };
