@@ -4,15 +4,20 @@ export const authCallback = async (req, res, next) => {
   try {
     const { id, firstName, lastName, imageUrl } = req.body;
 
-    const user = await User.findOne({ clerkId: id });
-
-    if (!user) {
-      await User.create({
+    await User.findOneAndUpdate(
+      { clerkId: id },
+      {
         clerkId: id,
         fullName: `${firstName} ${lastName}`,
         imageUrl,
-      });
-    }
+      },
+      {
+        upsert: true,
+        new: true,
+        runValidators: true,
+      }
+    );
+
     res.status(200).json({
       success: true,
     });
