@@ -1,3 +1,4 @@
+import PlaylistSkeleton from "@/components/skeletons/PlaylistSkeleton";
 import { buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -51,7 +52,7 @@ const LeftSidebar = () => {
         </div>
         <ScrollArea className="h-[calc(100vh-300px)]">
           <div className="space-y-2">
-            {isLoading ? <div>Loading...</div> : <div>Playlists</div>}
+            {isLoading ? <PlaylistSkeleton /> : <div>Playlists</div>}
           </div>
         </ScrollArea>
       </div>
