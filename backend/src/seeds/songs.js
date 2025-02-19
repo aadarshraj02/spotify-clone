@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { Song } from "../models/song.model.js";
-import { config } from "dotenv";
+import dotenv from "dotenv";
 
-config();
+dotenv.config();
 
 const songs = [
   {
