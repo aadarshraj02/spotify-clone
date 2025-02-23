@@ -13,12 +13,11 @@ const HomePage = () => {
     trendingSongs,
   } = useMusicStore();
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchFeaturedSongs();
     fetchMadeForYouSongs();
     fetchTrendingSongs();
-
-  },[fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs])
+  }, [fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs]);
 
   return (
     <div className="rounded-md overflow-hidden">
