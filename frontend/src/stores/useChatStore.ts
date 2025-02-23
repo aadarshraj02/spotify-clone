@@ -9,12 +9,14 @@ interface ChatStore {
   fetchUsers: () => Promise<void>;
 }
 
-export const useChatStore = create<ChatStore>((set) => ({
+export const useChatStore = create<ChatStore>((set, get) => ({
   users: [],
   isLoading: false,
   error: null,
 
   fetchUsers: async () => {
+    if (get().users.length > 0) return;
+
     set({ isLoading: true, error: null });
 
     try {

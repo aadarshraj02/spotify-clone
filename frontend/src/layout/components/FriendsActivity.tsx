@@ -7,13 +7,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const FriendsActivity = () => {
   const { users, fetchUsers } = useChatStore();
-  const user = useUser();
-
-  const isPlaying = false;
+  const { user } = useUser(); 
 
   useEffect(() => {
-    if (user) fetchUsers();
-  }, [fetchUsers, user]);
+    if (user?.id && users.length === 0) fetchUsers();
+  }, [fetchUsers, user?.id, users.length]);
 
   return (
     <div className="h-full bg-zinc-900 rounded-lg flex flex-col">
@@ -28,50 +26,54 @@ const FriendsActivity = () => {
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4">
-          {users.map((user) => (
-            <div
-              key={user?._id}
-              className="cursor-pointer hover:bg-zinc-800/50 p-3 rounded-md transition-colors group"
-            >
-              <div className="fle items-start gap-3">
-                <div className="relative">
-                  <Avatar className="size-10 border border-zinc-800">
-                    <AvatarImage src={user?.imageUrl} alt={user?.fullName} />
-                    <AvatarFallback>
-                      {user?.firstName?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div
-                    className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-zinc-500"
-                    aria-hidden="true"
-                  />
-                </div>
+          {users.map((user) => {
+            const isPlaying = user?.isListening || false; 
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-white">
-                      {user?.fullName}
-                    </span>
-                    {isPlaying && (
-                      <Music className="size-3.5 text-emerald-500 shrink-0" />
+            return (
+              <div
+                key={user?._id}
+                className="cursor-pointer hover:bg-zinc-800/50 p-3 rounded-md transition-colors group"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="relative">
+                    <Avatar className="size-10 border border-zinc-800">
+                      <AvatarImage src={user?.imageUrl} alt={user?.fullName} />
+                      <AvatarFallback>
+                        {user?.firstName?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div
+                      className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 bg-zinc-500"
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm text-white">
+                        {user?.fullName}
+                      </span>
+                      {isPlaying && (
+                        <Music className="size-3.5 text-emerald-500 shrink-0" />
+                      )}
+                    </div>
+                    {isPlaying ? (
+                      <div className="mt-1">
+                        <div className="mt-1 text-sm text-white font-medium truncate">
+                          {user?.currentSong?.title || "Unknown Song"}
+                        </div>
+                        <div className="text-xs text-zinc-400 truncate">
+                          by {user?.currentSong?.artist || "Unknown Artist"}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-1 text-xs text-zinc-400">Idle</div>
                     )}
                   </div>
-                  {isPlaying ? (
-                    <div className="mt-1">
-                      <div className="mt-1 text-sm text-white font-medium truncate">
-                        Any Song
-                      </div>
-                      <div className="text-xs text-zinc-400 truncate">
-                        by Any Singer
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-1 text-xs text-zinc-400">Idle</div>
-                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </ScrollArea>
     </div>
@@ -93,7 +95,6 @@ const LoginPrompt = () => (
     </div>
     <div className="space-y-2 max-w-[250px]">
       <h3 className="text-lg font-semibold text-white">
-        {" "}
         See what Friends are Listening
       </h3>
       <p className="text-sm text-zinc-400">
