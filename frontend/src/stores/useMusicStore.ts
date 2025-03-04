@@ -21,6 +21,7 @@ interface MusicStore {
   fetchMadeForYouSongs: () => Promise<void>;
   fetchStats: () => Promise<void>;
   fetchSongs: () => Promise<void>;
+  deleteSongs: (id: string) => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -137,6 +138,27 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set({
         songs: response.data,
       });
+    } catch (error: any) {
+      set({
+        error: error.message,
+      });
+    } finally {
+      set({
+        isLoading: false,
+      });
+    }
+  },
+  deleteSongs: async (id: string) => {
+    set({
+      isLoading: true,
+      error: null,
+    });
+
+    try {
+      await axiosInstance.delete(`/admin/songs/${id}`);
+      set((state) => ({
+        songs: state.songs.filter((song) => song._id !== id),
+      }));
     } catch (error: any) {
       set({
         error: error.message,
