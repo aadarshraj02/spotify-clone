@@ -3,6 +3,8 @@ import Header from "./components/Header";
 import DashboardStats from "./components/DashboardStats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Album, Music } from "lucide-react";
+import SongsTabContent from "./components/SongsTabContent";
+import AlbumsTabContent from "./components/AlbumsTabContent";
 
 const AdminPage = () => {
   const { isAdmin, isLoading } = useAuthStore();
@@ -31,8 +33,12 @@ const AdminPage = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="songs">Songs tab content</TabsContent>
-        <TabsContent value="albums">Albums tab content</TabsContent>
+        <TabsContent value="songs">
+          <SongsTabContent />
+        </TabsContent>
+        <TabsContent value="albums">
+          <AlbumsTabContent />
+        </TabsContent>
       </Tabs>
     </div>
   );
