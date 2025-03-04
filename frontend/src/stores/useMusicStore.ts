@@ -18,6 +18,8 @@ interface MusicStore {
   fetchFeaturedSongs: () => Promise<void>;
   fetchTrendingSongs: () => Promise<void>;
   fetchMadeForYouSongs: () => Promise<void>;
+  fetchStats: () => Promise<void>;
+  fetchSongs: () => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
@@ -98,4 +100,6 @@ export const useMusicStore = create<MusicStore>((set) => ({
       set({ isLoading: false });
     }
   },
+  fetchStats: async () => {},
+  fetchSongs: async () => {},
 }));
