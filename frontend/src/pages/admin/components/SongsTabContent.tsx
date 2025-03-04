@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Music } from "lucide-react";
+import SongsTable from "./SongsTable";
 
 const SongsTabContent = () => {
   return (
@@ -23,7 +24,9 @@ const SongsTabContent = () => {
           <Button>+</Button>
         </div>
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent>
+        <SongsTable />
+      </CardContent>
     </Card>
   );
 };
