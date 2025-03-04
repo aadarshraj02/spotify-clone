@@ -6,13 +6,17 @@ import { Album, Music } from "lucide-react";
 import SongsTabContent from "./components/SongsTabContent";
 import AlbumsTabContent from "./components/AlbumsTabContent";
 import { useEffect } from "react";
+import { useMusicStore } from "@/stores/useMusicStore";
 
 const AdminPage = () => {
   const { isAdmin, isLoading } = useAuthStore();
+  const { fetchAlbums, fetchSongs, fetchStats } = useMusicStore();
 
-  useEffect(()=>{
-    
-  },[])
+  useEffect(() => {
+    fetchAlbums();
+    fetchSongs();
+    fetchStats();
+  }, [fetchAlbums, fetchSongs, fetchStats]);
 
   if (!isAdmin && !isLoading) return <div>Unauthorized</div>;
 
