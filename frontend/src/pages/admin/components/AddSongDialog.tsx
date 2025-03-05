@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { useMusicStore } from "@/stores/useMusicStore";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Plus, Upload } from "lucide-react";
@@ -112,6 +113,50 @@ const AddSongDialog = () => {
                 {files.audio ? files.audio.name : "Upload Audio File"}
               </Button>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="" className="text-sm font-medium">
+              Title
+            </label>
+            <Input
+              value={newSong.title}
+              onChange={(e) =>
+                setNewSong({ ...newSong, title: e.target.value })
+              }
+              className="bg-zinc-800 border-zinc-700"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="" className="text-sm font-medium">
+              Artist
+            </label>
+            <Input
+              value={newSong.artist}
+              onChange={(e) =>
+                setNewSong({ ...newSong, artist: e.target.value })
+              }
+              className="bg-zinc-800 border-zinc-700"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="" className="text-sm font-medium">
+              Duration (seconds)
+            </label>
+            <Input
+              type="number"
+              min={0}
+              value={newSong.duration}
+              onChange={(e) =>
+                setNewSong({
+                  ...newSong,
+                  duration: parseInt(e.target.value) || 0,
+                })
+              }
+              className="bg-zinc-800 border-zinc-700"
+            />
           </div>
         </div>
       </DialogContent>
