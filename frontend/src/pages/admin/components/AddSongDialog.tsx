@@ -7,6 +7,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectContent,
+} from "@/components/ui/select";
 import { useMusicStore } from "@/stores/useMusicStore";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Plus, Upload } from "lucide-react";
@@ -19,7 +26,7 @@ const AddSongDialog = () => {
   const [newSong, setNewSong] = useState({
     title: "",
     artist: "",
-    album: undefined,
+    album: "",
     duration: 0,
   });
 
@@ -157,6 +164,28 @@ const AddSongDialog = () => {
               }
               className="bg-zinc-800 border-zinc-700"
             />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="" className="text-sm font-medium">
+              Album (optional)
+            </label>
+            <Select
+              value={newSong.album}
+              onValueChange={(e) => setNewSong({ ...newSong, album: e })}
+            >
+              <SelectTrigger className="bg-zinc-800 border-zinc-700">
+                <SelectValue placeholder="Select an album" />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectItem value="none">No Album (Single)</SelectItem>
+                {albums.map((album) => (
+                  <SelectItem key={album._id} value={album._id}>
+                    {album.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </DialogContent>
