@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -188,6 +189,19 @@ const AddSongDialog = () => {
             </Select>
           </div>
         </div>
+
+        <DialogFooter>
+          <Button
+            variant={"outline"}
+            onClick={() => setSongDialogOpen(false)}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} disabled={isLoading}>
+            {isLoading ? "Uploading..." : "Add Song"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
