@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Music } from "lucide-react";
 import SongsTable from "./SongsTable";
+import AddSongDialog from "./AddSongDialog";
 
 const SongsTabContent = () => {
   return (
@@ -21,7 +22,7 @@ const SongsTabContent = () => {
             </CardTitle>
             <CardDescription>Manage Your Music Tracks</CardDescription>
           </div>
-          <Button>+</Button>
+          <AddSongDialog />
         </div>
       </CardHeader>
       <CardContent>
