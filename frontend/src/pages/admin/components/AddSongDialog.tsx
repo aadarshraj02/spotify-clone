@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,20 +16,29 @@ import {
   SelectItem,
   SelectContent,
 } from "@/components/ui/select";
+import { axiosInstance } from "@/lib/axios";
 import { useMusicStore } from "@/stores/useMusicStore";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Plus, Upload } from "lucide-react";
 import { useRef, useState } from "react";
+import toast from "react-hot-toast";
+
+interface NewSong {
+  title: string;
+  artist: string;
+  album: string;
+  duration: string;
+}
 
 const AddSongDialog = () => {
   const { albums } = useMusicStore();
   const [songDialogOpen, setSongDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [newSong, setNewSong] = useState({
+  const [newSong, setNewSong] = useState<NewSong>({
     title: "",
     artist: "",
     album: "",
-    duration: 0,
+    duration: "0",
   });
 
   const [files, setFiles] = useState<{
@@ -42,7 +52,51 @@ const AddSongDialog = () => {
   const audioInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    setIsLoading(true);
+
+    try {
+      if (!files.audio || !files.image)
+        return toast.error("Please upload all the required files.");
+
+      const formData = new FormData();
+      formData.append("title", newSong.title);
+      formData.append("artist", newSong.artist);
+      formData.append("duration", newSong.duration);
+
+      if (newSong.album && newSong.album !== "null") {
+        formData.append("albumId", newSong.album);
+      }
+      formData.append("audioFile", files.audio);
+      formData.append("imageFile", files.image);
+
+      await axiosInstance.post("/admin/songs", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setNewSong({
+        title: "",
+        artist: "",
+        album: "",
+        duration: "0",
+      });
+
+      setFiles({
+        audio: null,
+        image: null,
+      });
+
+      setIsLoading(false);
+      setSongDialogOpen(false);
+      toast.success("Song added successfully");
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Dialog open={songDialogOpen} onOpenChange={setSongDialogOpen}>
@@ -160,7 +214,7 @@ const AddSongDialog = () => {
               onChange={(e) =>
                 setNewSong({
                   ...newSong,
-                  duration: parseInt(e.target.value) || 0,
+                  duration: e.target.value || "0",
                 })
               }
               className="bg-zinc-800 border-zinc-700"
