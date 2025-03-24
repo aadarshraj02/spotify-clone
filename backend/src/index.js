@@ -29,6 +29,9 @@ app.use(
   })
 );
 
+const httpServer = require("http").createServer(app);
+initializeSocket(httpServer);
+
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -56,7 +59,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log("Server is running");
   connectDB();
 });
