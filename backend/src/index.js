@@ -11,6 +11,8 @@ import { connectDB } from "./lib/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
 import path from "path";
+import { createServer } from "http";
+import { initializeSocket } from "./lib/socket.js";
 
 dotenv.config();
 
@@ -29,7 +31,7 @@ app.use(
   })
 );
 
-const httpServer = require("http").createServer(app);
+const httpServer = createServer(app);
 initializeSocket(httpServer);
 
 app.use(
