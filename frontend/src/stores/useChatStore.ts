@@ -18,6 +18,7 @@ interface ChatStore {
   initSocket: (userId: string) => void;
   disconnectSocket: () => void;
   sendMessage: (receiverId: string, senderId: string, content: string) => void;
+  fetchMessages: (userId: string) => Promise<void>;
 }
 
 const baseURL = "http://localhost:5000";
@@ -111,5 +112,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     if (!socket) return;
 
     socket.emit("send_message", { receiverId, senderId, content });
+  },
+  fetchMessages: async (userId: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get(`/users/messages/${userId}`);
+      set({ messages: response.data });
+    } catch (error: any) {
+      set({ error: error.response.data.message });
+    } finally {
+      set({ isLoading: false });
+    }
   },
 }));
