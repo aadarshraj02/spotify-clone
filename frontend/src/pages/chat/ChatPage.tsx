@@ -4,6 +4,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import UsersList from "./components/UsersList";
 import ChatHeader from "./components/ChatHeader";
+import MessageInput from "./components/MessageInput";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
@@ -30,9 +31,9 @@ const ChatPage = () => {
         <UsersList />
         <div className="flex flex-col h-full">
           {selectedUser ? (
-            <div>
+            <>
               <ChatHeader />
-              <ScrollArea>
+              <ScrollArea className="flex-1 overflow-y-auto">
                 <div className="p-4 space-y-4">
                   {messages?.map((message) => (
                     <div
@@ -66,7 +67,8 @@ const ChatPage = () => {
                   ))}
                 </div>
               </ScrollArea>
-            </div>
+              <MessageInput />
+            </>
           ) : (
             <NoConversation />
           )}

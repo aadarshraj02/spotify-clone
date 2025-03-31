@@ -4,7 +4,7 @@ import { Message } from "../models/message.model.js";
 export const initializeSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: "http://localhost:5173",
       credentials: true,
     },
   });
@@ -13,38 +13,47 @@ export const initializeSocket = (server) => {
   const userActivity = new Map();
 
   io.on("connection", (socket) => {
-    socket.on("User Connected", (userId) => {
+    console.log("A user connected:", socket.id);
+
+    socket.on("user_connected", (userId) => {
+      console.log(`User ${userId} connected with socket ID: ${socket.id}`);
+
       userSockets.set(userId, socket.id);
       userActivity.set(userId, "Idle");
 
-      io.emit("User Connected", userId);
+      io.emit("user_online", [...userSockets.keys()]);
 
-      socket.emit("User Online", Array.from(userSockets.keys()));
-
+      socket.emit("user_online", [...userSockets.keys()]);
       io.emit("Activities", Array.from(userActivity.entries()));
     });
+
     socket.on("updateActivity", (userId, activity) => {
       userActivity.set(userId, activity);
       io.emit("Activities", { userId, activity });
     });
 
-    socket.on("send message", async (data) => {
+    socket.on("send_message", async (data) => {
       try {
         const { senderId, receiverId, content } = data;
+        console.log(`Message from ${senderId} to ${receiverId}:`, content);
+
+        const receiverSocketId = userSockets.get(receiverId);
+        if (!receiverSocketId) {
+          console.log(`User ${receiverId} is not online`);
+          return;
+        }
+
         const message = await Message.create({
           senderId,
           receiverId,
           content,
         });
 
-        const receiverSocketId = userSockets.get(receiverId);
-        if (receiverSocketId) {
-          io.to(receiverSocketId).emit("receive message", message);
-        }
-
-        socket.emit("message sent", message);
+        io.to(receiverSocketId).emit("receive_message", message);
+        socket.emit("message_sent", message);
       } catch (error) {
-        socket.emit("message error", error.message);
+        console.error("Message error:", error);
+        socket.emit("message_error", error.message);
       }
     });
 
@@ -59,8 +68,11 @@ export const initializeSocket = (server) => {
           break;
         }
       }
+
       if (disconnectedUserId) {
-        io.emit("User Disconnected", disconnectedUserId);
+        console.log(`User ${disconnectedUserId} disconnected`);
+        io.emit("user_disconnected", disconnectedUserId);
+        io.emit("user_online", [...userSockets.keys()]);
       }
     });
   });
