@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { axiosInstance } from "@/lib/axios";
-import { Message } from "@/types";
+import { Message, User } from "@/types";
 import { create } from "zustand";
 import { io } from "socket.io-client";
 
@@ -13,12 +13,14 @@ interface ChatStore {
   onlineUsers: Set<string>;
   userActivities: Map<string, string>;
   messages: Message[];
+  selectedUser: User | null;
 
   fetchUsers: () => Promise<void>;
   initSocket: (userId: string) => void;
   disconnectSocket: () => void;
   sendMessage: (receiverId: string, senderId: string, content: string) => void;
   fetchMessages: (userId: string) => Promise<void>;
+  setSelectedUser: (user: User | null) => void;
 }
 
 const baseURL = "http://localhost:5000";
@@ -36,6 +38,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   onlineUsers: new Set(),
   userActivities: new Map(),
   messages: [],
+  selectedUser: null,
+
+  setSelectedUser: (user) => set({ selectedUser: user }),
 
   fetchUsers: async () => {
     if (get().users.length > 0) return;
